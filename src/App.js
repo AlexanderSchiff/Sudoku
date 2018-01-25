@@ -5,6 +5,7 @@ import './App.css';
 class App extends Component {
   render() {
     let dim = [0, 1, 2, 3, 4, 5, 6, 7, 8];
+    let testFunc = (e, r, c) => alert(`${e.target.value} on ${r},${c}`);
     //let board = array
     return (
       <div className="App">
@@ -18,7 +19,7 @@ class App extends Component {
               <tr key={i}>
                 {dim.map((j) =>
                   <td key={j}>
-                    <input type="number" min="1" max="9" />
+                    <input type="number" min="1" max="9" onChange={(e) => testFunc(e, i, j)} />
                   </td>
                 )}
               </tr>
