@@ -1,24 +1,23 @@
 import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
+import GameBoard from './components/GameBoard';
 
 const dim = [0, 1, 2, 3, 4, 5, 6, 7, 8];
-let board = dim.map(() => dim.map(() => undefined));
-let boardValid = dim.map(() => dim.map(() => true));
 
-let printBoard = () => 
-  console.log(
-    board.map((row) => 
-      row.map(val => val === undefined ? '_' : val )
-         .join(' '))
-      .join('\n'));
+// let printBoard = () => 
+//   console.log(
+//     board.map((row) => 
+//       row.map(val => val === undefined ? '_' : val )
+//          .join(' '))
+//       .join('\n'));
 
-let printValid = () => 
-    console.log(
-      boardValid.map((row) => 
-        row.map(val => val ? '_' : 'X' )
-            .join(' '))
-        .join('\n'));
+// let printValid = () => 
+//     console.log(
+//       boardValid.map((row) => 
+//         row.map(val => val ? '_' : 'X' )
+//             .join(' '))
+//         .join('\n'));
 
 let validate = (board) => {
   let newBoardValid = dim.map(() => dim.map(() => true));
@@ -53,12 +52,26 @@ let validate = (board) => {
 };
 
 class App extends Component {
+  constructor() {
+    super();
+    this.state = {
+      board: dim.map(() => dim.map(() => undefined)),
+      boardValid: dim.map(() => dim.map(() => true))
+    };
+  }
+
   render() {
     let handleChange = (row, col, value) => {
+      let board = this.state.board;
       board[row][col] = value === '' ? undefined : value;
-      printBoard();
-      boardValid = validate(board);
-      printValid();
+      //printBoard();
+      let boardValid = validate(board);
+      //printValid();
+
+      this.setState({
+        board,
+        boardValid
+      });
     }
 
     return (
@@ -67,19 +80,7 @@ class App extends Component {
           <img src={logo} className="App-logo" alt="logo" />
           <h1 className="App-title">Sudoku</h1>
         </header>
-        <table>
-          <tbody>
-            {dim.map((i) =>
-              <tr key={i}>
-                {dim.map((j) =>
-                  <td key={j}>
-                    <input type="number" min="1" max="9" onChange={(e) => handleChange(i, j, e.target.value)} />
-                  </td>
-                )}
-              </tr>
-            )}
-          </tbody>
-        </table>
+        <GameBoard board={this.state.board} boardValid={this.state.boardValid} handleChange={handleChange}/>
       </div>
     );
   }
